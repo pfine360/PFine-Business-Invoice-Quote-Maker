@@ -1,0 +1,985 @@
+Read AGENTS.md first and strictly obey its limit-conservation rules.
+
+Project:PFine Business Invoice & Quote Maker
+
+Current project path:D:\PFine Business Invoice & Quote Maker
+
+Current status:The app already works, and Codex has already created an installable Windows .exe desktop package here:
+
+D:\PFine Business Invoice & Quote Maker\dist-desktop
+
+The current goal is not to rebuild the app from scratch. The goal is to upgrade the existing working app into a world-class, professional, featureful, globally marketable desktop business application that can be sold internationally.
+
+Work only inside:
+
+D:\PFine Business Invoice & Quote Maker
+
+Do not inspect, edit, create, delete, move, rename, or scan anything outside this folder.
+
+Critical safety rules:
+
+Read AGENTS.md first.
+
+Conserve Codex limits.
+
+Do not scan the whole project unless absolutely necessary.
+
+Do not rebuild the app from scratch.
+
+Do not destroy the current working app.
+
+Do not destroy or overwrite the current working .exe package before making a backup.
+
+Do not edit only generated build output if source files exist.
+
+First identify the source files and desktop packaging files that control the app UI, styling, app icon, desktop title, and packaging metadata.
+
+Use targeted edits only.
+
+Do not install dependencies unless absolutely necessary.
+
+If installing anything is required, explain first and ask for confirmation.
+
+Do not add online login, cloud sync, payment gateways, server database, subscription billing, or licence activation in this phase.
+
+Do not add Android packaging in this phase.
+
+Keep the offline app working.
+
+Keep the Windows desktop app working.
+
+Keep UK English in all user-facing text and documentation.
+
+Main commercial goal:Turn PFine Business Invoice & Quote Maker into a professional offline-first desktop invoicing application for international small-business markets.
+
+The app should target:
+
+Freelancers
+
+Agencies
+
+Consultants
+
+Contractors
+
+Small shops
+
+Online sellers
+
+Real estate agents
+
+Local traders
+
+Service providers
+
+Schools
+
+Churches
+
+Community organisations
+
+Small businesses worldwide
+
+The product should no longer feel Kenya-only. Kenya should remain supported as one regional preset, but the default identity of the app must be global and international.
+
+Position the product as:A professional offline desktop business document generator for creating invoices, quotations, receipts, and delivery notes without monthly subscription fees.
+
+Core commercial message:Professional desktop invoicing software for small businesses worldwide. Create invoices, quotations, receipts, and delivery notes offline with regional tax labels, multiple currencies, payment details, local document storage, and polished PDF/print output.
+
+Step 1: Create a safe backup
+
+Before editing, create a backup inside this project only:
+
+backups\before-world-class-global-redesign
+
+Back up only the relevant current working source files and directly relevant desktop packaging files.
+
+Relevant files may include:
+
+index.html
+
+assets/css/styles.css
+
+assets/js/app.js
+
+assets/js/package-config.js
+
+manifest.webmanifest
+
+service-worker.js
+
+README.md
+
+package.json if present
+
+Electron files if present
+
+Tauri config files if present
+
+desktop wrapper files if present
+
+icon/source asset files if present
+
+If dist-desktop is very large, do not copy it automatically. Report its size and ask before copying the full generated build output.
+
+Step 2: Identify the desktop packaging system
+
+Inspect only directly relevant files to determine how the .exe was created.
+
+Determine whether the desktop package uses:
+
+Electron
+
+Tauri
+
+WebView2
+
+Another wrapper
+
+Do not scan unrelated folders.
+
+After identifying the packaging system, improve only the files that safely affect:
+
+App name
+
+Desktop window title
+
+App icon
+
+App metadata
+
+Build branding
+
+Source UI
+
+Source CSS
+
+Source JavaScript
+
+README/package documentation
+
+Step 3: Global market repositioning
+
+Update the app wording and documentation so the app feels international.
+
+Remove or reduce Kenya-only positioning from the general app identity.
+
+Do not remove Kenya support. Instead, make Kenya one optional regional preset.
+
+Use globally suitable wording such as:
+
+Professional offline desktop invoicing app
+
+Create invoices, quotations, receipts, and delivery notes
+
+One-time desktop software
+
+No monthly subscription required
+
+Designed for freelancers, small businesses, agencies, contractors, consultants, shops, service providers, and local traders worldwide
+
+Regional labels and currency settings
+
+Local device storage
+
+Print or save professional documents as PDF
+
+Avoid general wording that makes the app sound useful only in Kenya.
+
+Step 4: Add global regional settings
+
+Add or improve a settings section for region, currency, tax label, tax ID label, and payment label customisation.
+
+Support these presets:
+
+Global / Generic
+
+Kenya
+
+United States
+
+United Kingdom
+
+European Union
+
+Canada
+
+Australia
+
+India
+
+South Africa
+
+Nigeria
+
+Ghana
+
+Custom
+
+Regional default examples:
+
+Global / Generic:
+
+Currency: USD
+
+Tax label: Tax
+
+Business tax field: Tax ID
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+Kenya:
+
+Currency: KES
+
+Tax label: VAT
+
+Business tax field: KRA PIN
+
+Primary payment label: M-PESA Details
+
+Secondary payment label: Bank Details
+
+United States:
+
+Currency: USD
+
+Tax label: Sales Tax
+
+Business tax field: EIN / Tax ID
+
+Primary payment label: Bank Details
+
+Secondary payment label: PayPal / Card Payment Details
+
+United Kingdom:
+
+Currency: GBP
+
+Tax label: VAT
+
+Business tax field: VAT Number / UTR
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+European Union:
+
+Currency: EUR
+
+Tax label: VAT
+
+Business tax field: VAT Number
+
+Primary payment label: IBAN / Bank Details
+
+Secondary payment label: Payment Details
+
+Canada:
+
+Currency: CAD
+
+Tax label: GST/HST
+
+Business tax field: Business Number / Tax ID
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+Australia:
+
+Currency: AUD
+
+Tax label: GST
+
+Business tax field: ABN
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+India:
+
+Currency: INR
+
+Tax label: GST
+
+Business tax field: GSTIN
+
+Primary payment label: UPI / Bank Details
+
+Secondary payment label: Payment Details
+
+South Africa:
+
+Currency: ZAR
+
+Tax label: VAT
+
+Business tax field: VAT Number / Tax ID
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+Nigeria:
+
+Currency: NGN
+
+Tax label: VAT
+
+Business tax field: TIN
+
+Primary payment label: Bank Details
+
+Secondary payment label: Payment Details
+
+Ghana:
+
+Currency: GHS
+
+Tax label: VAT
+
+Business tax field: TIN
+
+Primary payment label: Mobile Money / Bank Details
+
+Secondary payment label: Payment Details
+
+Custom:
+
+Allow the user to edit currency
+
+Allow the user to edit tax label
+
+Allow the user to edit business tax ID label
+
+Allow the user to edit primary payment label
+
+Allow the user to edit secondary payment label
+
+Important:Do not claim legal, accounting, or tax compliance.Add a short note in the app or README:Tax labels and document wording can be customised to match local business requirements. This app is a document generator and does not provide legal, tax, or accounting advice.
+
+Step 5: Replace Kenya-only labels with flexible global labels
+
+Where the app currently uses hardcoded:
+
+KRA PIN
+
+M-PESA
+
+KES only
+
+Replace with dynamic region-aware labels.
+
+Use flexible fields:
+
+Business Tax ID Label
+
+Business Tax ID Value
+
+Primary Payment Details
+
+Secondary Payment Details
+
+Currency
+
+Tax Label
+
+Kenya preset may still display:
+
+KRA PIN
+
+M-PESA Details
+
+KES
+
+But other regions must display appropriate labels.
+
+Step 6: International currency support
+
+Add or improve currency selection.
+
+Support at least:
+
+USD
+
+EUR
+
+GBP
+
+KES
+
+CAD
+
+AUD
+
+INR
+
+NGN
+
+ZAR
+
+GHS
+
+Custom
+
+Do not add online exchange rates.Do not add automatic currency conversion.This must remain offline.
+
+Allow the user to enter a custom currency code or symbol if needed.
+
+Step 7: World-class visual redesign
+
+Redesign the app interface so it looks like premium commercial desktop software.
+
+Design goals:
+
+World-class
+
+Clean
+
+Modern
+
+Professional
+
+Trustworthy
+
+Business-grade
+
+Desktop-first
+
+Mobile responsive
+
+Easy for non-technical users
+
+Suitable for international selling
+
+Suitable for paid desktop software
+
+Use a controlled professional colour palette:
+
+Blue as the primary brand colour
+
+Green for success, paid status, saved messages, and positive actions
+
+Yellow for deposit-paid status, notices, and attention highlights
+
+Red for unpaid status, delete buttons, errors, and dangerous actions
+
+Neutral greys and white for backgrounds, cards, borders, forms, and document preview areas
+
+Do not scatter red, blue, green, and yellow randomly.Do not make the interface look childish.Do not overuse bright colours.Do not add heavy animations.Do not add external fonts unless already safely included.Do not add external scripts.Do not add tracking.
+
+Improve:
+
+App header
+
+Brand area
+
+Desktop window feel
+
+Main dashboard layout
+
+Section cards
+
+Form groups
+
+Buttons
+
+Badges
+
+Tables
+
+Totals panel
+
+Document preview
+
+Document history
+
+Empty states
+
+Notes and terms area
+
+Alerts and success messages
+
+Print/PDF styling
+
+Mobile responsive layout
+
+The desktop layout should make good use of screen width. It should not feel like a stretched mobile page.
+
+Step 8: Professional desktop app identity
+
+Improve the app identity so it feels like a real paid desktop product.
+
+Requirements:
+
+Use the product name consistently:PFine Business Invoice & Quote Maker
+
+Improve the desktop window title
+
+Improve app metadata where relevant
+
+Improve shortcut/app name where relevant
+
+Improve any About/Product section if present
+
+Ensure branding does not look like a demo, test build, or unfinished wrapper
+
+Step 9: Unique professional app icon
+
+Create or wire in a unique professional icon for the Windows desktop app.
+
+Icon direction:
+
+Global business document icon
+
+Invoice/document sheet
+
+Check mark, calculator, payment mark, or business symbol
+
+Clean simple silhouette
+
+Professional and recognisable at small sizes
+
+Suitable for desktop shortcut, window title, and installer branding
+
+Colour direction:
+
+Main blue
+
+Green accent
+
+Optional small yellow highlight
+
+Avoid red unless needed very subtly
+
+Avoid flag colours
+
+Avoid Kenya-specific symbols
+
+Avoid clutter
+
+Avoid cartoon style
+
+If the desktop wrapper requires .ico, .png, or multiple icon sizes, create the minimum safe assets required.
+
+If conversion tooling is unavailable, create the source icon asset and explain the exact conversion step needed.
+
+Do not install heavy icon tools without confirmation.
+
+Step 10: Make the app more useful as a professional desktop business app
+
+Improve business usefulness without turning this into a huge rewrite.
+
+Add or improve only where safe:
+
+Dashboard summary cards:
+
+Total saved documents
+
+Current document total
+
+Balance due
+
+Current payment status
+
+Better document history:
+
+Document type
+
+Document number
+
+Client name
+
+Date
+
+Total
+
+Payment status
+
+Clear Load/Delete actions
+
+Payment status badges:
+
+Paid: green
+
+Deposit Paid: yellow
+
+Unpaid: red
+
+Better workflow:
+
+Clear save profile action
+
+Clear save document action
+
+Clear load/edit behaviour
+
+Clear delete confirmation
+
+Clear document reset/new document action if safe
+
+Clear print/save PDF action
+
+Clear copy WhatsApp/payment summary action if present
+
+Better client and business details:
+
+Global business tax field
+
+Global payment fields
+
+Region-aware labels
+
+Currency selection
+
+Editable notes and terms
+
+Better feedback messages:
+
+Success message after saving
+
+Confirmation before delete
+
+Helpful notice for missing important fields
+
+Clear error messages where needed
+
+Do not add:
+
+Online database
+
+Cloud sync
+
+Login
+
+Online payments
+
+Licence activation
+
+Android packaging
+
+New server-side code
+
+Step 11: Professional document templates
+
+The printed/PDF output must look like something a paying business can proudly send to customers.
+
+Improve the output for:
+
+Invoice
+
+Quotation
+
+Receipt
+
+Delivery Note
+
+Print/PDF output must show:
+
+Business logo
+
+Business name
+
+Business contact details
+
+Region-aware business tax ID label and value
+
+Region-aware payment details
+
+Client details
+
+Document type
+
+Document number
+
+Date
+
+Due date where applicable
+
+Line items
+
+Subtotal
+
+Discount
+
+Region-aware tax label
+
+Grand total
+
+Amount paid
+
+Balance due
+
+Payment status
+
+Notes/terms
+
+Professional footer
+
+Print/PDF output must hide:
+
+Buttons
+
+Form controls
+
+Dashboard controls
+
+Navigation
+
+Editing controls
+
+Desktop-only UI
+
+Pricing/package marketing sections
+
+Avoid:
+
+Cut-off tables
+
+Broken spacing
+
+Poor alignment
+
+Amateur colours
+
+Buttons appearing in PDF
+
+Form inputs appearing in PDF
+
+Unprofessional document layout
+
+Step 12: Sellable package structure and global pricing
+
+Update README.md and, if safe, add a simple in-app “Editions” or “Packages” section.
+
+Do not show pricing inside the printed/PDF business document.
+
+Use these global package names and pricing:
+
+Starter Offline Desktop:$19 one-time
+
+Professional Offline Desktop:$39 one-time
+
+Custom Branded Desktop:$99 to $199 one-time
+
+Installed-for-you Setup:$149 to $399 depending on branding, setup, training, and support
+
+Future Hosted Online Edition:$9 to $19 per month
+
+Also include optional Kenya-local pricing:
+
+Professional Offline Desktop:KES 3,500 to KES 7,500
+
+Custom Branded Desktop:KES 9,500 to KES 15,000
+
+Installed-for-you Setup:KES 10,000 to KES 30,000
+
+Important commercial honesty:Do not claim hosted online sync, Android APK, cloud backup, online payments, server licence activation, or accounting compliance is complete unless actually implemented.
+
+Step 13: Update README.md professionally
+
+README.md should clearly explain:
+
+What the app does
+
+Who it is for globally
+
+How to open the desktop app
+
+How to use the offline app
+
+How to select a region
+
+How to customise currency
+
+How to customise tax labels
+
+How to customise payment labels
+
+How to create invoices
+
+How to create quotations
+
+How to create receipts
+
+How to create delivery notes
+
+How to save and load documents
+
+How to print or save as PDF
+
+How local storage works
+
+What regional presets do
+
+What the app does not do
+
+Package editions and pricing
+
+Future roadmap
+
+Limitations to state honestly:
+
+No online sync in the current version
+
+No automatic exchange rates
+
+No legal, accounting, or tax advice
+
+No cloud backup
+
+No multi-user login
+
+No server-side licence activation yet
+
+Saved data is local to the device/app environment
+
+Future roadmap may include:
+
+Backup/export/import
+
+More regional presets
+
+More document templates
+
+Custom branded editions
+
+Hosted online version
+
+Desktop licence activation
+
+Android/PWA edition
+
+Cloud sync
+
+Client/product catalogue
+
+Reports
+
+Step 14: Desktop build safety
+
+After source changes are complete, explain whether the desktop package must be rebuilt.
+
+If rebuild is needed:
+
+Provide the exact safe rebuild command
+
+Explain what it does
+
+Do not delete the old working build
+
+Do not run broad commands unnecessarily
+
+Do not overwrite working output without backup
+
+Explain where the new output will appear
+
+If you can safely rebuild within the existing project setup without installing new dependencies or affecting unrelated files, do so only if it follows AGENTS.md and does not risk the working build.
+
+If rebuild requires dependency installation or major setup, stop and ask for confirmation.
+
+Step 15: Final response after work
+
+After completing the changes, summarise:
+
+Files backed up
+
+Files inspected
+
+Files changed
+
+Desktop packaging system detected
+
+Global market repositioning completed
+
+Kenya-only wording replaced or made regional
+
+Regional presets added
+
+Currency support added
+
+Tax/payment labels improved
+
+Design/layout improvements made
+
+Icon changes made
+
+Business-useful features improved
+
+Print/PDF improvements made
+
+Package/pricing updates made
+
+Whether desktop rebuild is required
+
+Exact manual test steps
+
+Limitations and future work
+
+Manual test steps must include:
+
+Open the desktop app.
+
+Confirm the app title is professional.
+
+Confirm the app icon appears where supported.
+
+Select Global / Generic region.
+
+Confirm USD, Tax ID, and generic payment labels appear.
+
+Select Kenya.
+
+Confirm KES, KRA PIN, and M-PESA labels appear.
+
+Select United Kingdom.
+
+Confirm GBP and VAT wording appears.
+
+Select India.
+
+Confirm INR, GST, and UPI/Bank wording appears.
+
+Create an invoice.
+
+Create a quotation.
+
+Create a receipt.
+
+Create a delivery note.
+
+Add business logo.
+
+Add client details.
+
+Add multiple line items.
+
+Confirm subtotal, discount, tax, grand total, amount paid, and balance due.
+
+Save a document.
+
+Load a saved document.
+
+Delete a saved document.
+
+Confirm payment status badges.
+
+Print or save as PDF.
+
+Confirm PDF hides dashboard controls.
+
+Confirm the printed/PDF document looks professional.
+
+Close and reopen the app.
+
+Confirm saved settings/documents still load.
+
+Confirm there is no Kenya-only wording unless Kenya is selected.
+
+Confirm pricing/package sections do not appear in printed business documents.

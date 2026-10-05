@@ -1,0 +1,48 @@
+{
+  "name": "pfine-business-invoice-quote-maker",
+  "version": "1.0.0",
+  "description": "Offline desktop point of sale software for products, cart totals, invoices, quotations, receipts, and delivery notes.",
+  "author": "PFine",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "desktop:start": "node .\\node_modules\\electron\\cli.js .",
+    "desktop:dist": "node .\\node_modules\\electron-builder\\cli.js --win portable",
+    "desktop:installer": "node .\\node_modules\\electron-builder\\cli.js --win nsis --config.directories.output=dist-desktop-windows-installer"
+  },
+  "build": {
+    "appId": "com.pfine.invoicequotemaker",
+    "productName": "PFine Business Invoice & Quote Maker",
+    "files": [
+      "index.html",
+      "assets/**/*",
+      "manifest.webmanifest",
+      "service-worker.js",
+      "README.md",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist-desktop-stock-staff-licensed-pos"
+    },
+    "win": {
+      "icon": "assets/icons/pfine-business-invoice-quote-maker.ico",
+      "target": [
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PFine Business Invoice & Quote Maker",
+      "uninstallDisplayName": "PFine Business Invoice & Quote Maker",
+      "artifactName": "PFine-Business-Invoice-Quote-Maker-Setup-${version}.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  }
+}

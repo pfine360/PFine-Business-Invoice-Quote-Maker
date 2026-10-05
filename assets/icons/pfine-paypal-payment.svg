@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="paypalTitle">
+  <title id="paypalTitle">PayPal payment card</title>
+  <rect width="160" height="160" rx="28" fill="#eef4ff"/>
+  <rect x="24" y="24" width="112" height="72" rx="18" fill="#0a4ea3"/>
+  <path d="M54 44h26c14 0 22 7 20 18-2 11-11 17-24 17H62l-4 19H44l10-54z" fill="#ffffff"/>
+  <path d="M70 44h22c13 0 19 7 17 17-2 10-9 15-20 15H76l-4 22h-13l11-54z" fill="#61b8ff" opacity="0.92"/>
+  <circle cx="112" cy="118" r="22" fill="#0a4ea3"/>
+  <path d="M104 118h16M112 110v16" stroke="#ffffff" stroke-linecap="round" stroke-width="5"/>
+  <text x="24" y="130" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#0a4ea3">PayPal</text>
+</svg>

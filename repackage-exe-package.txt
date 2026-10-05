@@ -1,0 +1,805 @@
+Read AGENTS.md first and strictly obey its limit-conservation rules.
+
+Project:
+PFine Business POS & Invoice Desktop
+
+Current build:
+D:\PFine Business Invoice & Quote Maker\dist-desktop-real-pos
+
+Current problem:
+The app is still not tracking stock, batches, employees/cashiers, transactions, payments, balances, change, related documents, and store data like a real POS system.
+
+New requirement:
+Upgrade the app into a real POS and business management system where products/services, stock, batches, employees/cashiers, sales, documents, payments, balances, and related documents are properly stored and tracked.
+
+Work only inside:
+D:\PFine Business Invoice & Quote Maker
+
+Do not inspect, edit, create, delete, move, rename, or scan anything outside this folder.
+
+Critical safety rules:
+
+* Read AGENTS.md first.
+* Conserve Codex limits.
+* Do not scan unrelated files.
+* Do not patch only generated build output if source files exist.
+* Identify and fix source files first, then rebuild the desktop package.
+* Do not delete the current working build.
+* Back up relevant source files before editing.
+* Do not install dependencies unless absolutely necessary.
+* If dependency installation is required, explain first and ask for confirmation.
+* Do not add cloud sync, online login, payment gateway, or remote licence server in this phase unless explicitly instructed later.
+* Build a proper local POS foundation first.
+* Keep the app globally marketable.
+* No Kenya-only wording unless Kenya is selected in regional settings.
+
+Main goal:
+Create a professional offline-first POS system with full tracking for:
+
+* Stores/business profile
+* Products
+* Services
+* Product batches
+* Stock movement
+* Customers
+* Employees/cashiers
+* POS cart
+* Sales transactions
+* Payment records
+* Receipts
+* Invoices
+* Quotations
+* Delivery notes
+* Related documents
+* Sales/document history
+* Licence/package controls
+* Future hosted-online readiness
+
+Step 1: Backup and source detection
+
+Create a backup inside the project:
+
+backups\before-stock-staff-transaction-tracking-upgrade\
+
+Back up only directly relevant source files and desktop packaging files.
+
+If dist folders are large, report their size and ask before copying generated build output.
+
+Identify:
+
+* Desktop wrapper: Electron, Tauri, WebView2, or other
+* Main UI source files
+* Main JavaScript/data files
+* Storage/data persistence files
+* Print/PDF files
+* Desktop build command
+* Whether dist-desktop-real-pos is using current or stale source files
+
+Step 2: Real POS data model
+
+Create or refactor a central local data model.
+
+The app must store and track these entities locally:
+
+1. Store/business profile
+   Fields:
+
+* storeId
+* storeName
+* legalBusinessName
+* logo
+* phone
+* email
+* website
+* address
+* region
+* currency
+* taxLabel
+* taxIdLabel
+* taxIdValue
+* primaryPaymentLabel
+* primaryPaymentDetails
+* secondaryPaymentLabel
+* secondaryPaymentDetails
+* receiptFooter
+* invoiceTerms
+* quotationTerms
+* deliveryNoteTerms
+
+2. Employees/cashiers
+   Fields:
+
+* employeeId
+* employeeCode
+* fullName
+* role: owner, manager, cashier, salesperson, delivery, admin
+* phone
+* email
+* active status
+* pin or local access code only if already safe
+* createdAt
+* updatedAt
+
+Required behaviour:
+
+* There must be a current active cashier/employee selector or session.
+* The serving cashier/employee must be attached automatically to each sale, receipt, invoice, quotation, and delivery note.
+* Documents must show “Served by”, “Cashier”, “Prepared by”, or “Delivered by” depending on document type.
+* If no employee is selected, require the user to select or create one before completing a sale/document.
+
+3. Products/services
+   Fields:
+
+* productId
+* sku/itemCode
+* barcode
+* type: product or service
+* name
+* description
+* category
+* unit
+* defaultSellingPrice
+* costPrice
+* taxRate
+* stockTrackingEnabled
+* serviceTrackingEnabled
+* active status
+* reorderLevel
+* createdAt
+* updatedAt
+
+4. Product batches / stock lots
+   This is mandatory.
+
+The app must support batch tracking such as:
+Example:
+There are 12 batches.
+Each batch has 12 products.
+Total available stock should calculate as 144 units.
+If a customer buys 1, 2, or 3 products, the stock must reduce correctly from the selected batch or according to a clear FIFO stock rule.
+
+Batch fields:
+
+* batchId
+* productId
+* batchNumber
+* purchaseDate
+* expiryDate if applicable
+* initialQuantity
+* quantityAvailable
+* unitCost
+* sellingPriceOverride if applicable
+* supplierName
+* notes
+* active status
+
+Required batch behaviour:
+
+* Add product batch
+* Edit product batch
+* View batches per product
+* Calculate total product stock from all active batches
+* Deduct stock from batches when a sale/receipt/invoice marked paid or completed is saved
+* Use FIFO deduction by default unless the user selects a batch manually
+* Prevent selling more stock than available unless “allow negative stock” setting is explicitly enabled
+* Show clear stock warning if quantity requested is more than available
+* For services, do not deduct stock, but still track service transactions
+
+5. Stock movement ledger
+   Create a stock movement record whenever stock changes.
+
+Fields:
+
+* movementId
+* productId
+* batchId if applicable
+* movementType: stock-in, sale, sale-cancelled, return, adjustment, delivery, correction
+* quantityChange
+* quantityBefore
+* quantityAfter
+* relatedTransactionId
+* relatedDocumentNumber
+* employeeId
+* date
+* notes
+
+Required behaviour:
+
+* Every sale that deducts stock must create stock movement entries.
+* Every stock-in batch must create a stock-in entry.
+* If a transaction is cancelled or refunded later, stock movement must be reversible or clearly recorded.
+* Stock movement history must be viewable per product.
+
+6. Customers
+   Fields:
+
+* customerId
+* name
+* phone
+* email
+* address
+* taxId
+* customerType
+* notes
+* createdAt
+* updatedAt
+
+7. Transactions / sales
+   Fields:
+
+* transactionId
+* transactionType: sale, invoice, quotation, receipt, delivery-note
+* documentNumber
+* relatedTransactionId
+* relatedInvoiceNumber
+* relatedQuotationNumber
+* relatedDeliveryNoteNumber
+* date
+* dueDate
+* validUntil
+* customerId
+* customerSnapshot
+* employeeId
+* cashierSnapshot
+* items
+* totals
+* payment
+* delivery
+* status
+* notes
+* createdAt
+* updatedAt
+
+8. Transaction items
+   Each item must store:
+
+* lineId
+* productId if selected from catalogue
+* batchId if manually selected
+* sku/itemCode
+* barcode
+* type: product or service
+* name
+* description
+* quantity
+* unit
+* unitPrice
+* costPrice
+* discountPercent
+* discountAmount
+* taxPercent
+* taxAmount
+* lineSubtotal
+* lineTotal
+* quantityDelivered if delivery note
+* remarks
+* stockDeducted: true/false
+
+9. Payments
+   Each transaction must store:
+
+* paymentMethod: cash, card, bank transfer, mobile money, PayPal, cheque, credit, instalment, other
+* amountReceived
+* amountPaid
+* changeGiven
+* balanceDue
+* paymentReference
+* paymentDate
+* paymentStatus: paid, unpaid, partially paid, deposit paid, credit, instalment, refunded, cancelled
+* servedByEmployeeId
+* cashierNameSnapshot
+* notes
+
+10. Related documents
+    The app must track related documents.
+
+Examples:
+
+* Quotation can be converted to invoice.
+* Invoice can generate receipt.
+* Invoice can generate delivery note.
+* Receipt can reference invoice.
+* Delivery note can reference invoice/order/quotation.
+* A sale can generate receipt and invoice if needed.
+
+Store relationship fields:
+
+* sourceDocumentId
+* sourceDocumentType
+* relatedDocuments array
+* convertedFrom
+* convertedTo
+
+Step 3: Proper product and batch tracking workflow
+
+Add or improve screens for:
+
+1. Product/service catalogue
+   Required actions:
+
+* Add product
+* Add service
+* Edit product/service
+* Delete or deactivate product/service
+* Search product/service
+* Filter by category
+* View available stock
+* View batches
+* Add product to cart
+
+2. Batch/stock screen
+   Required actions:
+
+* Add stock batch to product
+* View all batches for selected product
+* Show initial quantity
+* Show quantity available
+* Show total stock across all batches
+* Show stock value if safe
+* Show low-stock warning
+* Show batch movement history
+
+3. Stock deduction logic
+   When a sale/paid invoice/receipt is completed:
+
+* Deduct the sold quantity from available batches.
+* Use FIFO by default.
+* Create stock movement entries.
+* Update product total available stock display.
+
+If sale quantity is 3 and batch available stock is 12:
+
+* batch quantityAvailable becomes 9
+* stock movement records quantityChange = -3
+
+If product has 12 batches × 12 units:
+
+* total available must show 144
+* after selling 3 units, total available must show 141
+
+Step 4: Employee/cashier tracking
+
+Add or improve employee/cashier management.
+
+Required screens or sections:
+
+* Employee list
+* Add employee
+* Edit employee
+* Deactivate employee
+* Select current cashier/employee
+
+Required behaviour:
+
+* Current cashier must be stored locally.
+* Current cashier must automatically attach to transactions and documents.
+* Receipts must show cashier/served by.
+* Invoices must show prepared by/served by.
+* Quotations must show prepared by.
+* Delivery notes must show delivered by and prepared by where appropriate.
+* Sales/document history must show the employee who served the customer.
+
+Do not add complex login/security yet unless already safe.
+For now, a selected cashier/session is enough.
+
+Step 5: Cart and clear cart
+
+The app must have a proper cart.
+
+Cart requirements:
+
+* Add selected product/service to cart
+* Add custom item/service to cart
+* Edit quantity
+* Edit price
+* Edit discount
+* Edit tax
+* Remove item
+* Clear cart button
+* Clear cart must ask for confirmation
+* Cart must show total quantity and total value
+* Cart must show stock warning for tracked products
+* Cart must prevent completing sale if stock is insufficient unless negative stock is explicitly allowed
+
+Cart table must show:
+
+* SKU
+* Item/service
+* Batch if selected
+* Quantity
+* Unit
+* Unit price
+* Discount
+* Tax
+* Line total
+* Stock available
+* Remarks
+* Remove action
+
+Step 6: Full POS totals engine
+
+Create or improve a central calculation engine.
+
+It must calculate correctly for all documents:
+
+* itemsCount
+* totalQuantity
+* subtotalBeforeDiscount
+* lineDiscountTotal
+* documentDiscountPercent
+* documentDiscountAmount
+* taxableSubtotal
+* totalTax
+* shippingCharge
+* serviceCharge
+* otherCharges
+* roundingAdjustment
+* grandTotal
+* amountReceived
+* amountPaid
+* changeGiven
+* balanceDue
+
+Rules:
+
+* No NaN
+* No blank totals
+* No wrong decimal formatting
+* Prevent accidental negative totals
+* Use selected currency
+* Receipt shows amount received, change given, and balance if partially paid
+* Invoice shows amount paid/received and balance due
+* Quotation shows quoted total and validity
+* Delivery note shows prices only if “show prices” is enabled
+* Credit/instalment must show paid amount and balance clearly
+
+Step 7: Document requirements
+
+Each document must show the product/service price, what was paid, change given, credit/instalment balance, and serving employee where relevant.
+
+Receipt must show:
+
+* Receipt number
+* Date/time
+* Customer
+* Items/services
+* Quantity
+* Unit price
+* Discount
+* Tax
+* Line total
+* Grand total
+* Amount received
+* Change given
+* Balance due if partially paid/credit/instalment
+* Payment method
+* Payment reference
+* Cashier/served by
+* “Received with thanks”
+
+Invoice must show:
+
+* Invoice number
+* Date
+* Due date
+* Bill To
+* Items/services
+* Quantity
+* Unit price
+* Discount
+* Tax
+* Line total
+* Grand total
+* Amount paid/received
+* Balance due
+* Payment status
+* Payment details
+* Prepared by/served by
+* Terms
+
+Quotation must show:
+
+* Quotation number
+* Date
+* Valid until
+* Quotation For
+* Items/services
+* Quantity
+* Unit price
+* Discount
+* Tax
+* Line total
+* Quotation total
+* Prepared by
+* Terms
+* Acceptance section
+
+Delivery Note must show:
+
+* Delivery note number
+* Date
+* Related invoice/order/quotation number
+* Deliver to
+* Delivery address
+* Items/services
+* Quantity ordered
+* Quantity delivered
+* Unit
+* Unit price and totals if show prices is enabled
+* Hide pricing in print/PDF if show prices is disabled
+* Delivered by
+* Received by
+* Receiver signature/date
+* Condition/remarks
+
+Step 8: Store, product, service, transaction and employee data tracking
+
+The app must correctly store and track:
+
+* Store/business profile
+* Regional settings
+* Products
+* Services
+* Batches
+* Stock movements
+* Customers
+* Employees/cashiers
+* Current cashier session
+* Cart drafts if safe
+* Sales/transactions
+* Receipts
+* Invoices
+* Quotations
+* Delivery notes
+* Payments
+* Related documents
+* Licence/package state
+
+Use local storage or the current local persistence approach.
+If the current storage method is becoming unsafe for this amount of data, explain the limitation and recommend IndexedDB for the next phase, but do not migrate to IndexedDB without confirmation unless it is already used.
+
+Step 9: Sales and document history
+
+History must show:
+
+* Date
+* Document type
+* Document number
+* Customer
+* Total
+* Paid
+* Balance
+* Payment status
+* Employee/cashier
+* Related document links/actions
+* Reprint action
+* Load/edit action
+* Delete/cancel action with confirmation
+
+Step 10: Licensing system
+
+The app must have a clear and proper licensing system foundation.
+
+Important:
+Do not pretend that frontend-only licence checks are fully secure.
+Do not build a fake secure system.
+
+Implement a practical licence-ready structure with honest limitations.
+
+Required licence editions:
+
+* Demo
+* Starter POS
+* Professional POS
+* Custom Branded POS
+* Hosted Online POS
+
+Licence state fields:
+
+* licenceKey
+* licenceStatus
+* edition
+* customerName
+* customerEmail
+* activationDate
+* expiryDate if applicable
+* allowedFeatures
+* maxProducts
+* maxCustomers
+* maxEmployees
+* maxSavedDocuments
+* watermarkEnabled
+* onlineActivationReady: true/false
+
+Demo limitations:
+
+* Demo watermark on printed documents
+* Limit products, customers, employees, and saved documents
+* Show demo notice
+* Disable commercial branding if safe
+
+Starter POS:
+
+* Products/services
+* Basic stock tracking
+* Customers
+* POS cart
+* Receipts
+* Invoices
+* Print/PDF
+* Local storage
+
+Professional POS:
+
+* Everything in Starter
+* Batch tracking
+* Employees/cashiers
+* Quotations
+* Delivery notes
+* Sales history
+* Daily summaries
+* Backup/export/import
+* Multiple payment methods
+* Related documents
+
+Custom Branded POS:
+
+* Everything in Professional
+* Custom app title/brand defaults
+* Custom colours if safe
+* Custom document footer
+* Custom business defaults
+
+Hosted Online POS:
+
+* Future edition only
+* Do not claim it is complete
+* Prepare roadmap/config only
+
+Licence screen:
+
+* Show current edition
+* Show customer name/email
+* Show licence key
+* Show activation status
+* Show enabled features
+* Allow manual key entry for early direct sales if already safe
+
+README must explain:
+
+* Manual key foundation for early direct sales
+* Signed offline licence file recommended next
+* Online activation server recommended for serious international sales
+* Hosted Online POS is future work
+
+Step 11: Hosted online readiness
+
+The app must be architected so it can later be hosted and accessible online.
+
+Do not build full hosted online system in this phase unless explicitly instructed later.
+
+Prepare only:
+
+* Clean data model
+* Clear storage abstraction if safe
+* README roadmap
+* Package mode called Hosted Online POS
+* Notes explaining future requirements:
+
+  * user accounts
+  * server database
+  * cloud sync
+  * online backup
+  * roles/permissions
+  * subscription billing
+  * server-side licence activation
+  * security hardening
+
+Do not claim hosted online support is complete if it is not.
+
+Step 12: Print / Save PDF
+
+Print / Save PDF must work.
+
+Requirements:
+
+* No “Printer Fails to Enumerate” error
+* Do not require printer enumeration before printing
+* Print selected document only
+* Hide dashboard controls
+* Hide form controls
+* Hide buttons
+* Hide licence/package screens
+* Show complete document fields
+* Include items, prices, payments, balance, change, and cashier/served by
+* For delivery note, obey Show prices Yes/No
+
+Step 13: Desktop rebuild
+
+After source fixes, rebuild the desktop app safely into:
+
+D:\PFine Business Invoice & Quote Maker\dist-desktop-stock-staff-licensed-pos
+
+Do not delete:
+D:\PFine Business Invoice & Quote Maker\dist-desktop-real-pos
+
+Use only the existing build command.
+Do not guess.
+If dependencies are missing, stop and ask before installing.
+
+Step 14: Acceptance criteria
+
+The task is not complete unless:
+
+1. Product can be added.
+2. Service can be added.
+3. Product batches can be added.
+4. Total stock calculates correctly across batches.
+5. Example 12 batches × 12 products = 144 total stock works.
+6. Selling 1, 2, or 3 products deducts stock correctly.
+7. Stock movement history is recorded.
+8. Customer can be added and selected.
+9. Employee/cashier can be added and selected.
+10. Cashier/served-by is automatically attached to sales/documents.
+11. Cart supports add item, edit item, remove item, and clear cart.
+12. Receipt shows items, prices, amount received, change, balance, payment method, and cashier.
+13. Invoice shows items, prices, amount paid/received, balance, payment status, and served by/prepared by.
+14. Quotation shows items, prices, quotation total, validity, and prepared by.
+15. Delivery note shows items, quantities, delivery details, served/delivered by, and optional prices.
+16. Sales/document history stores and displays transaction records correctly.
+17. Related documents are tracked.
+18. Licence screen and edition limits exist.
+19. Demo limitations exist if safe.
+20. Hosted Online POS is presented honestly as future-ready, not complete.
+21. Print / Save PDF works without printer enumeration failure.
+22. Fixed desktop build is created or safe build instructions are provided.
+
+Step 15: Final report
+
+After completing the work, report:
+
+* Files backed up
+* Files inspected
+* Files changed
+* Desktop wrapper detected
+* Storage approach used
+* Product/service tracking added
+* Batch tracking added
+* Stock movement tracking added
+* Employee/cashier tracking added
+* Cart and clear cart improvements
+* Transaction/payment tracking improvements
+* Receipt changes
+* Invoice changes
+* Quotation changes
+* Delivery note changes
+* Licence system foundation added
+* Hosted-online readiness added
+* Print/PDF status
+* Desktop output path
+* Whether new .exe was produced
+* Remaining limitations
+* Manual test steps
+
+Manual test steps must include:
+
+1. Open fixed desktop app.
+2. Add employee/cashier.
+3. Select current cashier.
+4. Add product.
+5. Add 12 batches with 12 quantity each or simulate equivalent batch entries.
+6. Confirm total stock shows 144.
+7. Add customer.
+8. Add 3 units to cart.
+9. Complete sale/receipt.
+10. Confirm stock reduces to 141.
+11. Confirm stock movement entry exists.
+12. Confirm receipt shows amount received, change/balance, and cashier.
+13. Create invoice with partial payment and confirm balance.
+14. Create quotation and confirm prepared by.
+15. Create delivery note and confirm delivered by/received by and Show Prices toggle.
+16. Clear cart and confirm cart resets.
+17. Check history and related documents.
+18. Test licence screen/demo edition.
+19. Print/Save PDF and confirm no printer enumeration error.
+20. Close and reopen the app and confirm data persists.

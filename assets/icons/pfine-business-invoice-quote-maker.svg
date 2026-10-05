@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">PFine Business Invoice and Quote Maker icon</title>
+  <desc id="desc">Professional blue business document icon with payment and approval accents.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f4c81"/>
+      <stop offset="100%" stop-color="#14365a"/>
+    </linearGradient>
+    <linearGradient id="sheet" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#eaf4fb"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="52" fill="url(#bg)"/>
+  <path d="M78 48h70l42 42v118c0 10-8 18-18 18H78c-10 0-18-8-18-18V66c0-10 8-18 18-18z" fill="url(#sheet)"/>
+  <path d="M148 48v30c0 10 8 18 18 18h24" fill="#d8eaf7"/>
+  <rect x="84" y="102" width="82" height="10" rx="5" fill="#b8d3e7"/>
+  <rect x="84" y="126" width="82" height="10" rx="5" fill="#b8d3e7"/>
+  <rect x="84" y="150" width="52" height="10" rx="5" fill="#b8d3e7"/>
+  <circle cx="176" cy="178" r="32" fill="#1f9d68"/>
+  <path d="M162 178l10 10 18-22" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+  <circle cx="94" cy="190" r="14" fill="#f2b53f"/>
+  <path d="M94 181v18M86 190h16" stroke="#14365a" stroke-linecap="round" stroke-width="5"/>
+</svg>

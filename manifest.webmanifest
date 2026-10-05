@@ -1,0 +1,27 @@
+{
+  "name": "PFine Business Invoice & Quote Maker",
+  "short_name": "PFine Quotes",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef4f8",
+  "theme_color": "#0f4c81",
+  "description": "Offline-first invoice, quotation, receipt, and delivery note generator for small businesses.",
+  "categories": ["business", "productivity", "finance"],
+  "icons": [
+    {
+      "src": "assets/icons/pfine-business-invoice-quote-maker.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/pfine-business-invoice-quote-maker.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 200" role="img" aria-labelledby="pfinePosLogoTitle">
+  <title id="pfinePosLogoTitle">PFine Point of Sale System logo</title>
+  <defs>
+    <linearGradient id="pfinePosLogoPanel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#11324a"/>
+      <stop offset="55%" stop-color="#0f6c7a"/>
+      <stop offset="100%" stop-color="#e1a63b"/>
+    </linearGradient>
+    <linearGradient id="pfinePosScreen" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dff4f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="860" height="200" rx="34" fill="#ffffff"/>
+  <g transform="translate(18 18)">
+    <rect x="0" y="0" width="164" height="164" rx="38" fill="url(#pfinePosLogoPanel)"/>
+    <rect x="34" y="34" width="96" height="66" rx="16" fill="url(#pfinePosScreen)"/>
+    <rect x="44" y="46" width="36" height="10" rx="5" fill="#11324a" opacity="0.82"/>
+    <rect x="44" y="63" width="52" height="8" rx="4" fill="#0f6c7a" opacity="0.7"/>
+    <rect x="44" y="77" width="26" height="8" rx="4" fill="#e1a63b" opacity="0.86"/>
+    <path d="M49 124h66" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+    <path d="M62 142h40" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="54" cy="124" r="14" fill="#ffffff"/>
+    <circle cx="108" cy="124" r="14" fill="#ffffff"/>
+    <circle cx="120" cy="58" r="18" fill="#e1a63b"/>
+    <path d="M112 58l5 5 10-12" fill="none" stroke="#11324a" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+  </g>
+  <g transform="translate(208 42)">
+    <text x="0" y="32" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#0f6c7a" letter-spacing="2">PFINE</text>
+    <text x="0" y="82" font-family="Segoe UI, Arial, sans-serif" font-size="50" font-weight="800" fill="#11324a">Point of Sale System</text>
+    <text x="0" y="122" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600" fill="#5c7084">Inventory, staff, payments, documents, and hosted-ready business workflows</text>
+  </g>
+</svg>

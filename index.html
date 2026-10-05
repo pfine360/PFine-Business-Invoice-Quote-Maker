@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f4c81">
+  <title>PFine Point of Sale System</title>
+  <link rel="icon" href="assets/icons/pfine-business-invoice-quote-maker.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div id="staff-session-overlay" class="session-overlay no-print">
+    <div class="session-card">
+      <p class="eyebrow">Staff session</p>
+      <h2>Sign in to continue</h2>
+      <p class="helper-text">Each cashier or staff member should use their own local account session so transactions, documents, and activity stay properly identified.</p>
+      <div class="form-grid">
+        <label>
+          <span>Employee code</span>
+          <input type="text" id="session-employee-code" autocomplete="username">
+        </label>
+        <label>
+          <span>Access code</span>
+          <input type="password" id="session-access-code" autocomplete="current-password">
+        </label>
+      </div>
+      <div class="session-actions">
+        <button type="button" id="session-sign-in-btn" class="primary-button">Sign in</button>
+        <button type="button" id="session-open-staff-setup-btn" class="secondary-button">Set up first staff account</button>
+        <button type="button" id="session-open-owner-panel-btn" class="secondary-button hidden" aria-hidden="true" tabindex="-1">Owner controls</button>
+      </div>
+      <p id="session-helper-text" class="helper-text"></p>
+    </div>
+  </div>
+
+  <div id="activation-plan-overlay" class="session-overlay no-print hidden">
+    <div class="session-card">
+      <p class="eyebrow">Activation</p>
+      <h2>Select activation plan</h2>
+      <p class="helper-text">Choose the plan to apply to this installation.</p>
+      <div class="pricing-grid pricing-grid-plans compact-pricing-grid">
+        <button type="button" class="secondary-button plan-select-button" data-activate-plan="monthly">Monthly plan</button>
+        <button type="button" class="secondary-button plan-select-button" data-activate-plan="yearly">Yearly plan</button>
+        <button type="button" class="secondary-button plan-select-button" data-activate-plan="lifetime">Lifetime plan</button>
+      </div>
+      <div class="session-actions">
+        <button type="button" id="cancel-activation-plan-btn" class="secondary-button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="custom-row-overlay" class="session-overlay no-print hidden">
+    <div class="session-card custom-row-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Custom cart row</p>
+          <h2>Add custom item or service</h2>
+        </div>
+        <button type="button" id="close-custom-row-btn" class="secondary-button">Close</button>
+      </div>
+      <div class="form-grid custom-row-grid">
+        <label class="full-width">
+          <span>Item or service name</span>
+          <input type="text" id="custom-row-name">
+        </label>
+        <label class="full-width">
+          <span>Description</span>
+          <textarea id="custom-row-description" rows="2"></textarea>
+        </label>
+        <label>
+          <span>SKU / reference</span>
+          <input type="text" id="custom-row-sku">
+        </label>
+        <label>
+          <span>Unit</span>
+          <input type="text" id="custom-row-unit" placeholder="pcs, hours, kg">
+        </label>
+        <label>
+          <span>Quantity</span>
+          <input type="number" id="custom-row-quantity" min="0" step="0.01" value="1">
+        </label>
+        <label>
+          <span>Unit price</span>
+          <input type="number" id="custom-row-unit-price" min="0" step="0.01" value="0">
+        </label>
+        <label>
+          <span>Discount %</span>
+          <input type="number" id="custom-row-discount-percent" min="0" step="0.01" value="0">
+        </label>
+        <label>
+          <span>Discount amount</span>
+          <input type="number" id="custom-row-discount-amount" min="0" step="0.01" value="0">
+        </label>
+        <label>
+          <span>Tax %</span>
+          <input type="number" id="custom-row-tax-percent" min="0" step="0.01" value="0">
+        </label>
+        <label class="full-width">
+          <span>Remarks</span>
+          <textarea id="custom-row-remarks" rows="2"></textarea>
+        </label>
+      </div>
+      <div class="session-actions">
+        <button type="button" id="save-custom-row-btn" class="primary-button">Add to cart</button>
+      </div>
+    </div>
+  </div>
+
+  <aside id="owner-panel" class="owner-panel no-print hidden" aria-hidden="true">
+    <div class="owner-panel-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Owner tools</p>
+          <h2>System control</h2>
+        </div>
+        <button type="button" id="close-owner-panel-btn" class="secondary-button">Close</button>
+      </div>
+      <p class="helper-text">This owner-only panel is intentionally hidden from normal staff and client workflow. Use it to manage package state, internal customer records, and controlled release settings on this device.</p>
+      <div class="form-grid">
+        <label>
+          <span>Edition</span>
+          <select id="licence-edition">
+            <option value="demo">Demo</option>
+            <option value="starter">Starter POS</option>
+            <option value="professional">Professional POS</option>
+            <option value="customBranded">Custom Branded POS</option>
+            <option value="hosted">Hosted Online POS</option>
+          </select>
+        </label>
+        <label>
+          <span>Licence status</span>
+          <select id="licence-status">
+            <option value="demo">Demo</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="expired">Expired</option>
+          </select>
+        </label>
+        <label>
+          <span>Customer name</span>
+          <input type="text" id="licence-customer-name">
+        </label>
+        <label>
+          <span>Customer email</span>
+          <input type="email" id="licence-customer-email">
+        </label>
+        <label class="full-width">
+          <span>Licence key</span>
+          <input type="text" id="licence-key">
+        </label>
+        <label class="full-width">
+          <span>Owner control code</span>
+          <input type="password" id="owner-access-code" placeholder="Leave blank to keep the current code">
+        </label>
+        <label>
+          <span>Activation date</span>
+          <input type="date" id="licence-activation-date">
+        </label>
+        <label>
+          <span>Expiry date</span>
+          <input type="date" id="licence-expiry-date">
+        </label>
+        <label>
+          <span>Online activation ready</span>
+          <select id="online-activation-ready">
+            <option value="false">False</option>
+            <option value="true">True</option>
+          </select>
+        </label>
+      </div>
+      <div class="info-card">
+        <p><strong>Enabled features:</strong></p>
+        <p id="licence-features-summary" class="helper-text"></p>
+        <p id="licence-limit-summary" class="helper-text"></p>
+        <p id="hosted-online-note" class="legal-note"></p>
+      </div>
+      <div class="owner-panel-actions">
+        <button type="button" id="save-licence-btn" class="primary-button">Save licence state</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <aside class="sidebar no-print">
+      <div class="brand-wrap">
+        <img src="assets/icons/pfine-business-invoice-quote-maker-logo.svg" alt="PFine Point of Sale System" class="brand-logo">
+        <div class="brand-copy">
+          <p class="eyebrow">Offline stock and staff POS</p>
+          <h1 id="app-title">PFine Point of Sale System</h1>
+          <p id="brand-summary" class="brand-summary">Products, services, batches, staff, sales documents, and print-ready business records in one premium desktop workspace.</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-card side-nav" aria-label="Main navigation">
+        <button type="button" class="nav-button active" data-page-target="dashboard">Dashboard</button>
+        <button type="button" class="nav-button" data-page-target="pos">POS Cart</button>
+        <button type="button" class="nav-button" data-page-target="catalogue">Products</button>
+        <button type="button" class="nav-button" data-page-target="stock">Stock &amp; Batches</button>
+        <button type="button" class="nav-button" data-page-target="customers">Customers</button>
+        <button type="button" class="nav-button" data-page-target="staff">Staff</button>
+        <button type="button" class="nav-button" data-page-target="plans">Plans &amp; Pricing</button>
+        <button type="button" class="nav-button" data-page-target="protection">Protection Notice</button>
+        <button type="button" class="nav-button" data-page-target="settings">Settings</button>
+      </nav>
+
+      <section class="sidebar-card">
+        <p class="sidebar-label">Edition</p>
+        <strong id="current-package-name">Demo</strong>
+        <p id="hero-support-note" class="sidebar-note">This edition stores data locally on this device. Hosted Online POS remains future work.</p>
+      </section>
+
+      <section class="sidebar-card">
+        <p class="sidebar-label">Today</p>
+        <div class="sidebar-stats">
+          <div>
+            <span class="stat-label">Sales total</span>
+            <strong id="summary-todays-sales">USD 0.00</strong>
+          </div>
+          <div>
+            <span class="stat-label">Transactions</span>
+            <strong id="summary-transactions">0</strong>
+          </div>
+          <div>
+            <span class="stat-label">Open balances</span>
+            <strong id="summary-unpaid">USD 0.00</strong>
+          </div>
+          <div>
+            <span class="stat-label">Tracked stock</span>
+            <strong id="summary-stock">0</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="sidebar-card">
+        <div class="section-heading">
+          <h2>Transaction retrieval</h2>
+        </div>
+        <label class="search-label">
+          <span>Search saved transactions</span>
+          <input type="search" id="history-search" placeholder="Search by document number, customer, cashier, or type">
+        </label>
+        <div class="history-toolbar">
+          <button type="button" id="retrieve-history-btn" class="secondary-button compact-button">Retrieve</button>
+          <button type="button" id="clear-history-btn" class="secondary-button compact-button">Clear</button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </aside>
+
+    <main class="main-shell">
+      <header class="topbar no-print">
+        <div>
+          <p class="eyebrow">Professional offline business workflow</p>
+          <h2 id="page-title">Dashboard</h2>
+          <p id="topbar-support" class="helper-text">Track staff, customers, products, service items, stock batches, sales documents, and printable business records from one desktop app.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="session-badge">
+            <span class="sidebar-label">Signed in</span>
+            <strong id="active-employee-label">No active staff session</strong>
+          </div>
+          <button type="button" id="stock-alert-bell" class="stock-alert-bell secondary-button" aria-label="Open stock alerts">
+            <span class="stock-alert-icon" aria-hidden="true">🔔</span>
+            <span class="stock-alert-copy">
+              <span class="sidebar-label">Stock alerts</span>
+              <strong id="stock-alert-count">0</strong>
+            </span>
+          </button>
+          <button type="button" id="new-document-btn" class="secondary-button">New document</button>
+          <button type="button" id="save-document-btn" class="secondary-button">Save transaction</button>
+          <button type="button" id="print-btn" class="primary-button">Print / Save PDF</button>
+          <button type="button" id="sign-out-btn" class="secondary-button">Sign out</button>
+        </div>
+      </header>
+
+      <section class="app-page active" data-page="dashboard">
+        <section class="hero-strip no-print">
+          <article class="hero-card hero-card-accent">
+            <p class="hero-kicker">PFine Point of Sale System</p>
+            <h2>Sell products, services, and tracked batches through one elegant, inventory-first business workflow.</h2>
+            <p>Every sale can be identified by the staff account session, customer, payment record, related document trail, low-stock status, and stock movement history.</p>
+          </article>
+          <article class="hero-card hero-card-muted">
+            <h2>Hosted-ready direction</h2>
+            <p>The app remains offline-first today, but the data structures and business entities are being shaped so a later hosted version can support larger business networks, branch workflows, and shared reporting more safely.</p>
+            <img src="assets/icons/pfine-business-invoice-quote-maker-hero.svg" alt="" class="hero-illustration">
+          </article>
+        </section>
+
+        <section class="page-grid no-print">
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Business snapshot</h2>
+            </div>
+            <div class="info-grid">
+              <p><strong>Current edition:</strong> <span id="dashboard-edition">Demo</span></p>
+              <p><strong>Current cashier:</strong> <span id="dashboard-cashier">-</span></p>
+              <p><strong>Store:</strong> <span id="dashboard-store-name">-</span></p>
+              <p><strong>Currency:</strong> <span id="dashboard-currency">-</span></p>
+            </div>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Hosted-ready notes</h2>
+            </div>
+            <p class="helper-text">Future hosted deployment will still require user accounts, a real database, permission layers, online sync, audit logging, subscription billing, and server-side licence activation. This desktop build does not claim those are complete.</p>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Stock alerts</h2>
+            </div>
+            <div id="dashboard-low-stock-list" class="card-list compact-list"></div>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Software benefits</h2>
+            </div>
+            <div class="benefit-grid">
+              <div class="benefit-card">
+                <strong>Inventory-first selling</strong>
+                <p>Search live stock, services, and batches directly from the POS cart without retyping item data.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Professional documents</strong>
+                <p>Generate receipts, invoices, quotations, and delivery notes from the same business transaction flow.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Staff accountability</strong>
+                <p>Keep cashier sessions, stock movements, customers, and related documents connected across the whole workflow.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Hosted-ready direction</strong>
+                <p>Prepare your business for future online deployment, larger teams, and wider payment-channel visibility.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Upgrade paths</h2>
+            </div>
+            <div class="benefit-grid">
+              <div class="benefit-card">
+                <strong>Starter POS</strong>
+                <p>Great for single-location retail, service businesses, and everyday invoicing.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Professional POS</strong>
+                <p>Best for tracked stock, batches, staff accountability, and richer document workflows.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Custom Branded POS</strong>
+                <p>Configure colours, document defaults, and buyer-facing presentation for client delivery.</p>
+              </div>
+              <div class="benefit-card">
+                <strong>Hosted Online POS</strong>
+                <p>Future-ready direction for larger business networks, central data, and shared dashboards.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-section panel-card full-span-card">
+            <div class="section-heading">
+              <h2>Packages and pricing</h2>
+            </div>
+            <div class="pricing-grid">
+              <div class="pricing-card">
+                <p class="pricing-label">Starter POS</p>
+                <strong class="pricing-price">Owner-set price</strong>
+                <p class="helper-text">For everyday invoicing, quotations, receipts, delivery notes, and light inventory selling.</p>
+                <p class="pricing-note">Single-location businesses and service teams.</p>
+              </div>
+              <div class="pricing-card pricing-card-featured">
+                <p class="pricing-label">Professional POS</p>
+                <strong class="pricing-price">Owner-set price</strong>
+                <p class="helper-text">For tracked stock, staff sessions, batches, customer records, and stronger sales control.</p>
+                <p class="pricing-note">Recommended for growing retail and mixed product-service workflows.</p>
+              </div>
+              <div class="pricing-card">
+                <p class="pricing-label">Custom Branded POS</p>
+                <strong class="pricing-price">Owner quotation</strong>
+                <p class="helper-text">For bespoke branding, client-specific setup, tailored defaults, and resale-ready delivery.</p>
+                <p class="pricing-note">Best for agency supply and installed-for-you business packages.</p>
+              </div>
+              <div class="pricing-card">
+                <p class="pricing-label">Hosted Online POS</p>
+                <strong class="pricing-price">Future rollout</strong>
+                <p class="helper-text">Planned for branch-wide access, central records, server-side licensing, and shared reporting.</p>
+                <p class="pricing-note">Do not market as complete until the hosted backend is actually built.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Controlled delivery</h2>
+            </div>
+            <p class="helper-text">Client-facing delivery should stay clean and professional. Internal package handling, release preparation, and private control records should remain outside the visible customer workflow.</p>
+          </article>
+
+          <article class="panel-section panel-card">
+            <div class="section-heading">
+              <h2>Redistribution notice</h2>
+            </div>
+            <div class="notice-card notice-card-danger">
+              <p><strong>Redistribution infringement warning</strong></p>
+              <p class="helper-text">This software is supplied for authorised business use only. Unauthorised copying, resale, redistribution, reverse-packaging, or licence circumvention without owner permission is prohibited and may amount to copyright infringement, contract breach, and commercial misuse.</p>
+              <p class="legal-note">Owner-managed editions, branding, and client activation records should be controlled privately before public distribution.</p>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="plans">
+        <section class="page-grid no-print">
+          <article class="panel-section panel-card full-span-card">
+            <div class="section-heading">
+              <h2>Activation status</h2>
+            </div>
+            <div class="info-grid">
+              <p><strong>Status:</strong> <span id="activation-status-label">Not activated</span></p>
+              <p><strong>Current plan:</strong> <span id="activation-plan-label">Not activated</span></p>
+              <p><strong>Valid until:</strong> <span id="activation-expiry-label">Activation required</span></p>
+              <p><strong>Prepared plan:</strong> <span id="activation-selected-plan-label">Monthly plan</span></p>
+            </div>
+            <p id="activation-guidance" class="helper-text">Choose the plan to prepare on this device. A valid activation must be completed before normal staff sign-in can continue.</p>
+          </article>
+
+          <article class="panel-section panel-card full-span-card">
+            <div class="section-heading">
+              <h2>Plans and pricing</h2>
+            </div>
+            <div class="pricing-grid pricing-grid-plans">
+              <div class="pricing-card">
+              <p class="pricing-label">Monthly plan</p>
+                <strong class="pricing-price">USD 35</strong>
+                <p class="helper-text">Suitable for short projects, pop-up shops, temporary field teams, and trial business rollouts.</p>
+                <p class="pricing-note">30-day activation from the day the installation is activated.</p>
+                <p class="legal-note">Plan allocation is completed during authorised setup.</p>
+              </div>
+              <div class="pricing-card pricing-card-featured">
+                <p class="pricing-label">Yearly plan</p>
+                <strong class="pricing-price">USD 320</strong>
+                <p class="helper-text">Balanced for established shops, growing service businesses, and long-running staff operations.</p>
+                <p class="pricing-note">365-day activation from the day the installation is activated.</p>
+                <p class="legal-note">Plan allocation is completed during authorised setup.</p>
+              </div>
+              <div class="pricing-card">
+                <p class="pricing-label">Lifetime plan</p>
+                <strong class="pricing-price">USD 950</strong>
+                <p class="helper-text">Best for permanent internal deployment, custom-branded supply, and one-time premium ownership sales.</p>
+                <p class="pricing-note">No expiry countdown after successful activation.</p>
+                <p class="legal-note">Plan allocation is completed during authorised setup.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="protection">
+        <section class="page-grid no-print">
+          <article class="panel-section panel-card full-span-card">
+            <div class="section-heading">
+              <h2>Software protection and redistribution notice</h2>
+            </div>
+            <div class="activation-steps">
+              <p><strong>Authorised use only.</strong> This software is supplied for the licensed customer, installation, or business environment approved by PFine.</p>
+              <p><strong>No unauthorised redistribution.</strong> Copying, sharing, resale, reposting, re-uploading, repackaging, or passing the software to another party without written owner approval is prohibited.</p>
+              <p><strong>No licence circumvention.</strong> Attempts to bypass activation, alter package restrictions, reverse deployment controls, or remove supplier protection notices are unauthorised.</p>
+              <p><strong>No false ownership claims.</strong> Buyers, agents, staff, technicians, and third parties must not present the software as their own product, source code, or intellectual property.</p>
+              <p><strong>Commercial protection.</strong> Unauthorised commercial distribution, unauthorised sub-licensing, and concealed resale may expose the violating party to copyright complaints, contractual claims, and loss of support.</p>
+              <p><strong>Support boundary.</strong> Official support, maintenance, and approved upgrade handling remain under the software owner or an authorised PFine-supplied channel only.</p>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="pos">
+        <div class="workspace-grid page-workspace">
+          <section class="workspace-column workspace-centre stack">
+            <section class="panel-section panel-card no-print">
+              <div class="section-heading">
+                <h2>Sale and document setup</h2>
+                <button type="button" id="copy-whatsapp-btn" class="secondary-button">Copy summary</button>
+              </div>
+              <div class="form-grid">
+                <label>
+                  <span>Document type</span>
+                  <select id="document-type"></select>
+                </label>
+                <label>
+                  <span>Document number</span>
+                  <input type="text" id="document-number">
+                </label>
+                <label>
+                  <span>Date</span>
+                  <input type="date" id="document-date">
+                </label>
+                <label>
+                  <span id="due-date-label">Due date / valid until</span>
+                  <input type="date" id="due-date">
+                </label>
+                <label>
+                  <span>Payment status</span>
+                  <select id="payment-status">
+                    <option value="unpaid">Unpaid</option>
+                    <option value="paid">Paid</option>
+                    <option value="partially paid">Partially paid</option>
+                    <option value="deposit paid">Deposit paid</option>
+                    <option value="credit">Credit</option>
+                    <option value="instalment">Instalment</option>
+                    <option value="refunded">Refunded</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Payment method</span>
+                  <select id="payment-method">
+                    <option value="">Select</option>
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                    <option value="bank transfer">Bank transfer</option>
+                    <option value="mobile money">Mobile money</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="credit">Credit</option>
+                    <option value="instalment">Instalment</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Payment reference</span>
+                  <input type="text" id="payment-reference">
+                </label>
+                <label>
+                  <span>Current served by</span>
+                  <input type="text" id="cashier-name" readonly>
+                </label>
+                <label class="full-width">
+                  <span>Customer / client</span>
+                  <select id="document-customer-id"></select>
+                </label>
+                <label>
+                  <span>Project / service reference</span>
+                  <input type="text" id="project-reference">
+                </label>
+                <label>
+                  <span>Related document number</span>
+                  <input type="text" id="related-document-number">
+                </label>
+                <label class="full-width">
+                  <span>Source document for conversion / relation</span>
+                  <select id="source-document-id"></select>
+                </label>
+                <label>
+                  <span>Delivery method</span>
+                  <input type="text" id="delivery-method">
+                </label>
+                <label>
+                  <span>Tracking / reference number</span>
+                  <input type="text" id="tracking-reference">
+                </label>
+                <label>
+                  <span>Delivered by</span>
+                  <input type="text" id="delivered-by">
+                </label>
+                <label>
+                  <span>Received by</span>
+                  <input type="text" id="received-by">
+                </label>
+                <label>
+                  <span>Date received</span>
+                  <input type="date" id="date-received">
+                </label>
+                <label>
+                  <span>Show prices on delivery note</span>
+                  <select id="show-prices-delivery-note">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </label>
+                <label class="full-width">
+                  <span>Delivery address</span>
+                  <textarea id="delivery-address" rows="2"></textarea>
+                </label>
+                <label class="full-width">
+                  <span>Notes / remarks</span>
+                  <textarea id="notes" rows="2"></textarea>
+                </label>
+                <label class="full-width">
+                  <span>Terms and conditions</span>
+                  <textarea id="terms-conditions" rows="3"></textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="panel-section panel-card no-print">
+              <div class="section-heading cart-entry-heading">
+                <h2>Cart and item entry</h2>
+                <div class="inline-actions cart-action-stack">
+                  <button type="button" id="add-line-item-btn" class="secondary-button">Add custom row</button>
+                  <button type="button" id="clear-cart-btn" class="secondary-button">Clear cart</button>
+                </div>
+              </div>
+              <div class="cart-entry-panel">
+                <div class="cart-entry-copy">
+                  <strong>Build the document from live inventory or custom service rows</strong>
+                  <p class="helper-text">Search products and services, add them into the cart, then fine-tune quantity, tax, discounts, batches, and notes on each row. The document preview and totals update automatically for invoices, receipts, quotations, and delivery notes.</p>
+                </div>
+                <div class="cart-entry-grid">
+                  <div class="catalogue-toolbar cart-search-panel">
+                    <label class="search-label full-width">
+                      <span>Search inventory for the POS cart</span>
+                      <input type="search" id="pos-product-search" placeholder="Search stocked product or service by SKU, barcode, or name">
+                    </label>
+                  </div>
+                  <div class="cart-step-list">
+                    <article class="cart-step-card">
+                      <strong>1. Search and add</strong>
+                      <p class="helper-text">Find products, services, and stock batches, then add each one into the cart.</p>
+                    </article>
+                    <article class="cart-step-card">
+                      <strong>2. Refine the row</strong>
+                      <p class="helper-text">Adjust quantity, unit price, discount, tax, and notes for each selected line.</p>
+                    </article>
+                    <article class="cart-step-card">
+                      <strong>3. Print the document</strong>
+                      <p class="helper-text">Use one cart for delivery notes, invoices, receipts, or quotations with correct totals.</p>
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <div id="pos-product-results" class="card-list compact-list"></div>
+              <div class="cart-hints">
+                <p class="helper-text">Use the row selector for precise item selection, or add a custom row for one-off services and special charges.</p>
+                <p class="helper-text">Tracked products show available stock and relevant batch choices. Complex customer purchases can be combined in one cart and printed as one polished document.</p>
+              </div>
+              <div class="line-item-editor-shell">
+                <div class="line-item-editor-intro">
+                  <strong>Each cart line now edits in a vertical workflow</strong>
+                  <p class="helper-text">Every product, service, or batch line is stacked from top to bottom for easier searching, editing, and review on desktop and small screens.</p>
+                </div>
+                <div id="line-items-body" class="line-item-stack"></div>
+              </div>
+            </section>
+          </section>
+
+          <aside class="workspace-column workspace-right stack">
+            <section class="panel-section panel-card no-print">
+              <div class="section-heading">
+                <h2>Totals and payment</h2>
+              </div>
+              <div class="form-grid compact-grid">
+                <label>
+                  <span>Document discount %</span>
+                  <input type="number" id="document-discount-percent" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Document discount amount</span>
+                  <input type="number" id="document-discount-amount" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Shipping charge</span>
+                  <input type="number" id="shipping-charge" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Service charge</span>
+                  <input type="number" id="service-charge" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Other charges</span>
+                  <input type="number" id="other-charges" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Rounding adjustment</span>
+                  <input type="number" id="rounding-adjustment" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Amount received</span>
+                  <input type="number" id="amount-received" min="0" step="0.01" value="0">
+                </label>
+                <label>
+                  <span>Amount paid</span>
+                  <input type="number" id="amount-paid" min="0" step="0.01" value="0">
+                </label>
+              </div>
+
+              <div class="totals-summary no-print">
+                <div class="totals-row"><span>Items count</span><strong id="metric-items-count">0</strong></div>
+                <div class="totals-row"><span>Total quantity</span><strong id="metric-total-quantity">0</strong></div>
+                <div class="totals-row"><span>Subtotal before discount</span><strong id="metric-subtotal-before-discount">USD 0.00</strong></div>
+                <div class="totals-row"><span>Line discount total</span><strong id="metric-total-line-discount">USD 0.00</strong></div>
+                <div class="totals-row"><span>Document discount</span><strong id="metric-document-discount">USD 0.00</strong></div>
+                <div class="totals-row"><span>Taxable subtotal</span><strong id="metric-taxable-subtotal">USD 0.00</strong></div>
+                <div class="totals-row"><span>Total tax</span><strong id="metric-total-tax">USD 0.00</strong></div>
+                <div class="totals-row"><span>Shipping charge</span><strong id="metric-shipping-charge">USD 0.00</strong></div>
+                <div class="totals-row"><span>Service charge</span><strong id="metric-service-charge">USD 0.00</strong></div>
+                <div class="totals-row"><span>Other charges</span><strong id="metric-other-charges">USD 0.00</strong></div>
+                <div class="totals-row"><span>Rounding adjustment</span><strong id="metric-rounding-adjustment">USD 0.00</strong></div>
+                <div class="totals-row grand-total"><span>Grand total</span><strong id="metric-grand-total">USD 0.00</strong></div>
+                <div class="totals-row"><span>Amount received</span><strong id="metric-amount-received">USD 0.00</strong></div>
+                <div class="totals-row"><span>Amount paid</span><strong id="metric-amount-paid">USD 0.00</strong></div>
+                <div class="totals-row"><span>Change given</span><strong id="metric-change-given">USD 0.00</strong></div>
+                <div class="totals-row"><span>Balance due</span><strong id="metric-balance-due">USD 0.00</strong></div>
+              </div>
+            </section>
+
+            <section class="preview-shell">
+              <div class="preview-toolbar no-print">
+                <div>
+                  <p class="eyebrow">Print-ready output</p>
+                  <h2>Document preview</h2>
+                </div>
+                <p class="helper-text preview-helper">Only the selected business document is shown in print or PDF output.</p>
+              </div>
+              <article class="document-preview" id="document-preview"></article>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="app-page" data-page="catalogue">
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Product and service catalogue</h2>
+            <div class="inline-actions">
+              <button type="button" id="save-product-btn" class="primary-button">Save item</button>
+              <button type="button" id="clear-product-btn" class="secondary-button">Clear form</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label>
+              <span>SKU / item code</span>
+              <input type="text" id="product-sku">
+            </label>
+            <label>
+              <span>Barcode</span>
+              <input type="text" id="product-barcode">
+            </label>
+            <label>
+              <span>Type</span>
+              <select id="product-type">
+                <option value="product">Product</option>
+                <option value="service">Service</option>
+              </select>
+            </label>
+            <label>
+              <span>Name</span>
+              <input type="text" id="product-name">
+            </label>
+            <label class="full-width">
+              <span>Description</span>
+              <textarea id="product-description" rows="2"></textarea>
+            </label>
+            <label>
+              <span>Category</span>
+              <input type="text" id="product-category">
+            </label>
+            <label>
+              <span>Unit</span>
+              <input type="text" id="product-unit" placeholder="pcs, hours, kg">
+            </label>
+            <label>
+              <span>Default selling price</span>
+              <input type="number" id="product-unit-price" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Cost price</span>
+              <input type="number" id="product-cost-price" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Tax rate %</span>
+              <input type="number" id="product-tax-percent" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Stock tracking enabled</span>
+              <select id="product-stock-tracking-enabled">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </label>
+            <label>
+              <span>Service tracking enabled</span>
+              <select id="product-service-tracking-enabled">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </label>
+            <label>
+              <span>Reorder level</span>
+              <input type="number" id="product-reorder-level" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="product-active-status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+          <div class="catalogue-toolbar">
+            <label class="search-label">
+              <span>Search catalogue</span>
+              <input type="search" id="product-search" placeholder="Search by SKU, barcode, name, or category">
+            </label>
+            <label class="search-label">
+              <span>Filter category</span>
+              <input type="search" id="product-category-filter" placeholder="Category filter">
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table class="catalogue-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Type</th>
+                  <th>Item</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Batches</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="product-list-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="stock">
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Batch and stock tracking</h2>
+            <div class="inline-actions">
+              <button type="button" id="save-batch-btn" class="primary-button">Save batch</button>
+              <button type="button" id="clear-batch-btn" class="secondary-button">Clear batch form</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="full-width">
+              <span>Product for batch tracking</span>
+              <select id="batch-product-id"></select>
+            </label>
+            <label>
+              <span>Batch number</span>
+              <input type="text" id="batch-number">
+            </label>
+            <label>
+              <span>Purchase date</span>
+              <input type="date" id="batch-purchase-date">
+            </label>
+            <label>
+              <span>Expiry date</span>
+              <input type="date" id="batch-expiry-date">
+            </label>
+            <label>
+              <span>Initial quantity</span>
+              <input type="number" id="batch-initial-quantity" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Quantity available</span>
+              <input type="number" id="batch-quantity-available" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Unit cost</span>
+              <input type="number" id="batch-unit-cost" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Selling price override</span>
+              <input type="number" id="batch-selling-price-override" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Supplier name</span>
+              <input type="text" id="batch-supplier-name">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="batch-active-status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+            <label class="full-width">
+              <span>Notes</span>
+              <textarea id="batch-notes" rows="2"></textarea>
+            </label>
+          </div>
+          <div id="batch-stock-summary" class="info-card"></div>
+          <div class="split-list">
+            <div>
+              <h3>Batches for selected product</h3>
+              <div id="batch-list" class="card-list compact-list"></div>
+            </div>
+            <div>
+              <h3>Stock movement history</h3>
+              <div id="stock-movement-list" class="card-list compact-list"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="customers">
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Customers</h2>
+            <div class="inline-actions">
+              <button type="button" id="save-customer-btn" class="primary-button">Save customer</button>
+              <button type="button" id="clear-customer-btn" class="secondary-button">Clear form</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="full-width">
+              <span>Load existing customer</span>
+              <select id="customer-picker"></select>
+            </label>
+            <label>
+              <span>Name</span>
+              <input type="text" id="customer-name">
+            </label>
+            <label>
+              <span>Phone</span>
+              <input type="tel" id="customer-phone">
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" id="customer-email">
+            </label>
+            <label>
+              <span>Tax ID</span>
+              <input type="text" id="customer-tax-id">
+            </label>
+            <label>
+              <span>Customer type</span>
+              <input type="text" id="customer-type" placeholder="Retail, wholesale, contractor">
+            </label>
+            <label>
+              <span>Reference number</span>
+              <input type="text" id="customer-reference-number">
+            </label>
+            <label class="full-width">
+              <span>Address</span>
+              <textarea id="customer-address" rows="2"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Notes</span>
+              <textarea id="customer-notes" rows="2"></textarea>
+            </label>
+          </div>
+          <div id="customer-list" class="card-list"></div>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="staff">
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Staff accounts and cashier session</h2>
+            <div class="inline-actions">
+              <button type="button" id="save-employee-btn" class="primary-button">Save staff account</button>
+              <button type="button" id="clear-employee-btn" class="secondary-button">Clear form</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="full-width">
+              <span>Current active cashier / employee</span>
+              <select id="current-employee-id"></select>
+            </label>
+            <label>
+              <span>Employee code</span>
+              <input type="text" id="employee-code">
+            </label>
+            <label>
+              <span>Full name</span>
+              <input type="text" id="employee-full-name">
+            </label>
+            <label>
+              <span>Role</span>
+              <select id="employee-role">
+                <option value="owner">Owner</option>
+                <option value="manager">Manager</option>
+                <option value="cashier">Cashier</option>
+                <option value="salesperson">Salesperson</option>
+                <option value="delivery">Delivery</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+            <label>
+              <span>Local access code</span>
+              <input type="password" id="employee-access-code" autocomplete="new-password">
+            </label>
+            <label>
+              <span>Phone</span>
+              <input type="tel" id="employee-phone">
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" id="employee-email">
+            </label>
+            <label>
+              <span>Active status</span>
+              <select id="employee-active-status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+          <div id="employee-list" class="card-list"></div>
+        </section>
+      </section>
+
+      <section class="app-page" data-page="settings">
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Store and regional settings</h2>
+            <button type="button" id="save-business-profile-btn" class="secondary-button">Save store profile</button>
+          </div>
+          <div class="form-grid">
+            <label>
+              <span>Store logo</span>
+              <input type="file" id="business-logo" accept="image/*">
+            </label>
+            <label>
+              <span>Store name</span>
+              <input type="text" id="business-name" autocomplete="organization">
+            </label>
+            <label>
+              <span>Legal business name</span>
+              <input type="text" id="legal-business-name">
+            </label>
+            <label>
+              <span>Phone number</span>
+              <input type="tel" id="business-phone">
+            </label>
+            <label>
+              <span>Email address</span>
+              <input type="email" id="business-email">
+            </label>
+            <label>
+              <span>Website</span>
+              <input type="text" id="business-website">
+            </label>
+            <label class="full-width">
+              <span>Address</span>
+              <textarea id="business-address" rows="2"></textarea>
+            </label>
+            <label>
+              <span>Region preset</span>
+              <select id="business-region"></select>
+            </label>
+            <label>
+              <span>Currency</span>
+              <select id="business-currency-select"></select>
+            </label>
+            <label>
+              <span>Custom currency code or symbol</span>
+              <input type="text" id="business-currency-custom" placeholder="For example CHF or AED">
+            </label>
+            <label>
+              <span>Tax label</span>
+              <input type="text" id="business-tax-label">
+            </label>
+            <label>
+              <span>Default tax percentage</span>
+              <input type="number" id="business-tax-default-percent" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Business tax ID label</span>
+              <input type="text" id="business-tax-id-label">
+            </label>
+            <label>
+              <span>Business tax ID value</span>
+              <input type="text" id="business-tax-id-value">
+            </label>
+            <label class="full-width">
+              <span>Receipt footer</span>
+              <textarea id="receipt-footer" rows="2"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Default invoice terms</span>
+              <textarea id="invoice-terms-default" rows="2"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Default quotation terms</span>
+              <textarea id="quotation-terms-default" rows="2"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Default delivery note terms</span>
+              <textarea id="delivery-note-terms-default" rows="2"></textarea>
+            </label>
+            <label>
+              <span>Allow negative stock</span>
+              <select id="allow-negative-stock">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel-section panel-card no-print">
+          <div class="section-heading">
+            <h2>Payment channels and owner configuration</h2>
+          </div>
+          <div class="payment-showcase">
+            <article class="payment-card">
+              <img src="assets/icons/pfine-mpesa-payment.svg" alt="M-PESA payment" class="payment-illustration">
+              <div>
+                <h3>M-PESA channel</h3>
+                <p class="helper-text">Use the fields below to configure the label and details shown in the software and printed documents.</p>
+              </div>
+            </article>
+            <article class="payment-card">
+              <img src="assets/icons/pfine-paypal-payment.svg" alt="PayPal payment" class="payment-illustration">
+              <div>
+                <h3>PayPal or online channel</h3>
+                <p class="helper-text">Use this as a second owner-defined payment lane for PayPal, card processing, or another online collection method.</p>
+              </div>
+            </article>
+          </div>
+          <div class="form-grid">
+            <label>
+              <span>Primary payment label</span>
+              <input type="text" id="primary-payment-label">
+            </label>
+            <label class="full-width">
+              <span>Primary payment details</span>
+              <textarea id="primary-payment-details" rows="2"></textarea>
+            </label>
+            <label>
+              <span>Secondary payment label</span>
+              <input type="text" id="secondary-payment-label">
+            </label>
+            <label class="full-width">
+              <span>Secondary payment details</span>
+              <textarea id="secondary-payment-details" rows="2"></textarea>
+            </label>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <template id="line-item-template">
+    <article class="line-item-card">
+      <div class="line-item-card-header">
+        <div>
+          <p class="line-item-card-label">Cart line</p>
+          <strong class="line-item-card-title">Product or service entry</strong>
+        </div>
+        <div class="row-actions line-item-actions">
+          <button type="button" class="secondary-button compact-button" data-action="duplicate">Duplicate</button>
+          <button type="button" class="danger-button compact-button" data-action="remove">Remove</button>
+        </div>
+      </div>
+      <div class="line-item-fields">
+        <label class="line-item-field">
+          <span>Select item</span>
+          <select data-field="productId" aria-label="Select product or service"></select>
+        </label>
+        <label class="line-item-field">
+          <span>SKU</span>
+          <input type="text" data-field="sku" aria-label="SKU">
+        </label>
+        <label class="line-item-field">
+          <span>Item / service</span>
+          <input type="text" data-field="name" aria-label="Item name">
+        </label>
+        <label class="line-item-field">
+          <span>Description</span>
+          <textarea data-field="description" rows="2" aria-label="Description"></textarea>
+        </label>
+        <label class="line-item-field">
+          <span>Batch</span>
+          <select data-field="batchId" aria-label="Batch"></select>
+        </label>
+        <label class="line-item-field">
+          <span>Quantity</span>
+          <input type="number" data-field="quantity" min="0" step="0.01" value="1" aria-label="Quantity">
+        </label>
+        <label class="line-item-field">
+          <span>Unit</span>
+          <input type="text" data-field="unit" aria-label="Unit">
+        </label>
+        <label class="line-item-field">
+          <span>Unit price</span>
+          <input type="number" data-field="unitPrice" min="0" step="0.01" value="0" aria-label="Unit price">
+        </label>
+        <label class="line-item-field">
+          <span>Discount %</span>
+          <input type="number" data-field="discountPercent" min="0" step="0.01" value="0" aria-label="Discount percent">
+        </label>
+        <label class="line-item-field">
+          <span>Discount amount</span>
+          <input type="number" data-field="discountAmount" min="0" step="0.01" value="0" aria-label="Discount amount">
+        </label>
+        <label class="line-item-field">
+          <span>Tax %</span>
+          <input type="number" data-field="taxPercent" min="0" step="0.01" value="0" aria-label="Tax percent">
+        </label>
+        <label class="line-item-field line-item-output-field">
+          <span>Tax amount</span>
+          <output data-field="taxAmount">0.00</output>
+        </label>
+        <label class="line-item-field line-item-output-field">
+          <span>Line total</span>
+          <output data-field="lineTotal">0.00</output>
+        </label>
+        <label class="line-item-field line-item-output-field">
+          <span>Stock available</span>
+          <output data-field="stockAvailable">0.00</output>
+        </label>
+        <label class="line-item-field">
+          <span>Remarks</span>
+          <textarea data-field="remarks" rows="2" aria-label="Remarks"></textarea>
+        </label>
+      </div>
+    </article>
+  </template>
+
+  <div id="status-message" class="status-toast no-print" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/package-config.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
