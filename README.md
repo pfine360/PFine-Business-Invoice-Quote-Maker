@@ -229,3 +229,7 @@ That is acceptable for this offline-first phase, but for larger long-term data v
 18. Open the hidden owner panel with `Ctrl+Shift+O` and test the licence state in Demo mode.
 19. Click Print / Save PDF and confirm no printer enumeration failure stops the workflow.
 20. Close and reopen the app and confirm local data persists.
+21. ## Documentation
+
+Additional documentation, examples and related resources are available on
+[Pfine 360](https://www.pfine360.com/).
